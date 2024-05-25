@@ -1,11 +1,13 @@
 import json
 import pathlib
+import typing
 from copy import deepcopy
 from os import listdir
 from os.path import isfile, join
 from typing import Any
 
 import requests
+from starlette.responses import Response
 
 from config import Config
 
@@ -77,3 +79,16 @@ class ConfigProvider:
                 break
         merged['outbounds'] = outbounds + merged['outbounds']
         return merged
+
+
+class PrettyJSONResponse(Response):
+    media_type = "application/json"
+
+    def render(self, content: typing.Any) -> bytes:
+        return json.dumps(
+            content,
+            ensure_ascii=False,
+            allow_nan=False,
+            indent=4,
+            separators=(", ", ": "),
+        ).encode("utf-8")

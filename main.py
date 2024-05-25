@@ -5,20 +5,20 @@ import uvicorn
 from fastapi import FastAPI
 
 from config import Config
-from utils import ConfigProvider
+from utils import ConfigProvider, PrettyJSONResponse
 
 coloredlogs.install(level='INFO')
 app = FastAPI()
 provider = ConfigProvider()
 
 
-@app.get("/{json_path}/{user_id}")
+@app.get("/{json_path}/{user_id}", response_class=PrettyJSONResponse)
 def original(json_path: str, user_id: str):
     return provider.create_original(json_path, user_id)
 
 
-@app.get("/{json_path}/{user_id}/{template}")
-def original(json_path: str, user_id: str, template: str):
+@app.get("/{json_path}/{user_id}/{template}", response_class=PrettyJSONResponse)
+def template(json_path: str, user_id: str, template: str):
     return provider.create_template(json_path, user_id, template)
 
 
