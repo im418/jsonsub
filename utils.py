@@ -51,10 +51,10 @@ class ConfigProvider:
         for item in config:
             if 'outbounds' in item:
                 for outbound in item['outbounds']:
-                    if 'protocol' in outbound and 'settings' in outbound and 'vnext' in outbound['settings']:
-                        outbounds.append(outbound)
+                    outbounds.append(outbound)
         for i, outbound in enumerate(outbounds):
-            outbound['tag'] = f'proxy_{i}'
+            if 'protocol' in outbound and 'settings' in outbound and 'vnext' in outbound['settings']:
+                outbound['tag'] = f'proxy_{i}'
         return outbounds
 
     def create_original(self, json_path: str, user_id: str) -> any:
