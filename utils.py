@@ -48,10 +48,13 @@ class ConfigProvider:
     @staticmethod
     def __extract_outbounds(config: list[any]) -> str:
         outbounds = []
+        outbounds_hash = set()
         for item in config:
             if 'outbounds' in item:
                 for outbound in item['outbounds']:
-                    outbounds.append(outbound)
+                    if str(outbound) not in outbounds_hash:
+                        outbounds.append(outbound)
+                        outbounds_hash.add(str(outbound))
         for i, outbound in enumerate(outbounds):
             if 'protocol' in outbound and 'settings' in outbound and 'vnext' in outbound['settings']:
                 outbound['tag'] = f'proxy_{i}'
