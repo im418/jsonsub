@@ -4,7 +4,7 @@ import typing
 from copy import deepcopy
 from os import listdir
 from os.path import isfile, join
-from typing import Any
+from typing import Any, List
 
 import requests
 from starlette.responses import Response
@@ -29,12 +29,16 @@ class ConfigProvider:
         return all_templates
 
     @staticmethod
-    def __read_json_config(url) -> list[any]:
+    def __read_body(url: str) -> any:
         if not url.startswith('http'):
             url = Config.BASE_PATH + url
         response = requests.get(url)
-        response.raise_for_status()  # Raise an exception for non-200 status codes
-        d = response.json()
+        response.raise_for_status()
+        return response.json()
+
+    @staticmethod
+    def __read_json_config(url) -> list[any]:
+        d = ConfigProvider.__read_body(url)
         if isinstance(d, dict):
             d = [d]
         return d
@@ -46,7 +50,7 @@ class ConfigProvider:
         return 'No remark provided'
 
     @staticmethod
-    def __extract_outbounds(config: list[any]) -> str:
+    def __extract_outbounds(config: list[any]) -> list[Any]:
         outbounds = []
         outbounds_hash = set()
         for item in config:
@@ -61,7 +65,7 @@ class ConfigProvider:
         return outbounds
 
     def create_original(self, json_path: str, user_id: str) -> any:
-        return self.__read_json_config(f'/{json_path}/{user_id}')
+        return self.__read_body(f'/{json_path}/{user_id}')
 
     def create_template(self, json_path: str, user_id: str, template: str) -> any:
         if template not in self.templates:
