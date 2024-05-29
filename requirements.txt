@@ -1,4 +1,5 @@
-requests
-fastapi
-coloredlogs
-uvicorn
+requests~=2.32.2
+fastapi~=0.111.0
+coloredlogs~=15.0.1
+uvicorn~=0.29.0
+starlette~=0.37.2

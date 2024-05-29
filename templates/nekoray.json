@@ -1,7 +1,11 @@
 {
   "dns": {
-    "queryStrategy": "UseIP",
     "servers": [
+      {
+        "address": "https://1.1.1.1/dns-query",
+        "skipFallback": false,
+        "queryStrategy": "UseIPv6"
+      },
       {
         "address": "8.8.8.8",
         "skipFallback": false
