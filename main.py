@@ -2,7 +2,7 @@ import os.path
 
 import coloredlogs
 import uvicorn
-from fastapi import FastAPI
+from fastapi import FastAPI, Response
 
 from config import Config
 from utils import ConfigProvider, PrettyJSONResponse
@@ -14,7 +14,8 @@ provider = ConfigProvider()
 
 @app.get("/{json_path}/{user_id}", response_class=PrettyJSONResponse)
 def original(json_path: str, user_id: str):
-    return provider.create_original(json_path, user_id)
+    res = provider.create_original(json_path, user_id)
+    return Response(content=res, media_type='application/json')
 
 
 @app.get("/{json_path}/{user_id}/{template}", response_class=PrettyJSONResponse)
